@@ -5,10 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Guia Interativo: Doenças Respiratórias em Crianças</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Chosen Palette: Calm Health Guide -->
-    <!-- Application Structure Plan: A tab-based single-page application design was chosen to transform the linear leaflet into a user-friendly interactive tool. This structure allows parents to quickly navigate to the section they need most (e.g., jumping directly to "Sinais de Alerta") without overwhelming scrolling. The main sections are: "Visão Geral" (with interactive buttons to display symptoms for each disease, facilitating comparison), "Sinais de Alerta" (highlighted for urgency), "Cuidados em Casa", "Quando Ir ao Médico", and "Prevenção". This task-oriented design is more efficient for a digital format, enhancing usability and speed of information retrieval compared to a static document. -->
-    <!-- Visualization & Content Choices: The source report is entirely textual. Therefore, instead of data charts, the application focuses on interactive content presentation. For the "Visão Geral" section (Goal: Inform/Compare), interactive buttons are used to dynamically display symptoms for each illness (Method: Vanilla JS content swapping). This is more engaging and less cluttered than a long static list. For "Sinais de Alerta" (Goal: Inform Urgently), a visually distinct card with a warning icon (Unicode) and contrasting colors is used to draw immediate attention (Method: HTML/Tailwind). Other informational sections ("Cuidados em Casa", etc.) use clear typography and Unicode icons for better readability and scannability (Method: HTML/Tailwind). This approach translates the report's goals into an effective interactive experience without needing data visualization libraries. -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -52,7 +48,7 @@
         <header class="text-center mb-8">
             <h1 class="text-3xl md:text-4xl font-bold text-[#22577A]">Guia Rápido para Pais</h1>
             <p class="text-md text-[#80ED99] font-semibold mt-1">Doenças Respiratórias em Crianças</p>
-            <p class="text-sm text-gray-500 mt-2">Um guia interativo para as famílias de Porto Alegre</p>
+            <p class="text-sm text-gray-500 mt-2">NÃO SUBSTITUI UMA CONSULTA MÉDICA</p>
         </header>
 
         <nav class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 md:gap-4 mb-8">
@@ -113,12 +109,17 @@
         </main>
         
         <footer class="text-center mt-12">
-          
-            <div class="flex justify-center flex-wrap gap-x-4 gap-y-2 mt-2">
-                <a href="https://www.gov.br/saude/pt-br/assuntos/saude-de-a-a-z/s/srag" target="_blank" class="text-xs text-[#38A3A5] hover:underline">Ministério da Saúde</a>
-                <a href="https://bvsms.saude.gov.br/bvs/publicacoes/partes/infeccoes_respiratorias1.pdf" target="_blank" class="text-xs text-[#38A3A5] hover:underline">Cartilhas Técnicas</a>
-                <a href="https://portal.fiocruz.br/noticia/infogripe-casos-de-srag-seguem-em-crescimento-em-parte-do-pais" target="_blank" class="text-xs text-[#38A3A5] hover:underline">Fiocruz</a>
-                <a href="https://saude.rs.gov.br/aumento-de-hospitalizacoes-de-criancas-por-problemas-respiratorios-esta-associado-a-baixa-cobertura-vacinal-de-influenza-e-covid" target="_blank" class="text-xs text-[#38A3A5] hover:underline">Secretaria da Saúde RS</a>
+            <p class="text-sm text-gray-500">Informações baseadas em fontes oficiais do Brasil.</p>
+            <div class="flex justify-center flex-wrap gap-x-4 gap-y-2 mt-4">
+                <a href="https://bvsms.saude.gov.br/bvs/publicacoes/partes/infeccoes_respiratorias1.pdf" target="_blank" class="text-xs text-[#38A3A5] hover:underline">Ministério da Saúde (IRAs em Crianças - PDF)</a>
+                <a href="https://www.gov.br/saude/pt-br/centrais-de-conteudo/publicacoes/notas-tecnicas/2023/nota-tecnica-no-30-2023-cgvdi-dpni-svsa-ms" target="_blank" class="text-xs text-[#38A3A5] hover:underline">Ministério da Saúde (Manejo de VSR - NT)</a>
+                <a href="https://www.gov.br/saude/pt-br/vacinacao" target="_blank" class="text-xs text-[#38A3A5] hover:underline">Ministério da Saúde (Vacinação)</a>
+                <a href="https://www.gov.br/saude/pt-br/assuntos/saude-de-a-a-z/g/gripe" target="_blank" class="text-xs text-[#38A3A5] hover:underline">Ministério da Saúde (Gripe)</a>
+                <a href="https://www.gov.br/saude/pt-br/assuntos/saude-de-a-a-z/b/bronquiolite" target="_blank" class="text-xs text-[#38A3A5] hover:underline">Ministério da Saúde (Bronquiolite)</a>
+                <a href="https://www.gov.br/saude/pt-br/assuntos/saude-de-a-a-z/p/pneumonia" target="_blank" class="text-xs text-[#38A3A5] hover:underline">Ministério da Saúde (Pneumonia)</a>
+                <a href="https://www.gov.br/saude/pt-br/assuntos/saude-de-a-a-z/a/asma" target="_blank" class="text-xs text-[#38A3A5] hover:underline">Ministério da Saúde (Asma)</a>
+                <a href="https://portal.fiocruz.br/noticia/infogripe-alerta-que-incidencia-de-srag-continua-alta" target="_blank" class="text-xs text-[#38A3A5] hover:underline">Fiocruz (InfoGripe SRAG)</a>
+                <a href="https://atencaoprimaria.rs.gov.br/saude-da-crianca" target="_blank" class="text-xs text-[#38A3A5] hover:underline">Saúde RS (Saúde da Criança na APS)</a>
             </div>
         </footer>
 
