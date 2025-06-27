@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia Interativo: Doenças Respiratórias em Crianças</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chosen Palette: Calm Health Guide -->
+    <!-- Application Structure Plan: A tab-based single-page application design was chosen to transform the linear leaflet into a user-friendly interactive tool. This structure allows parents to quickly navigate to the section they need most (e.g., jumping directly to "Sinais de Alerta") without overwhelming scrolling. The main sections are: "Visão Geral" (with interactive buttons to display symptoms for each disease, facilitating comparison), "Sinais de Alerta" (highlighted for urgency), "Cuidados em Casa", "Quando Ir ao Médico", and "Prevenção". This task-oriented design is more efficient for a digital format, enhancing usability and speed of information retrieval compared to a static document. -->
+    <!-- Visualization & Content Choices: The source report is entirely textual. Therefore, instead of data charts, the application focuses on interactive content presentation. For the "Visão Geral" section (Goal: Inform/Compare), interactive buttons are used to dynamically display symptoms for each illness (Method: Vanilla JS content swapping). This is more engaging and less cluttered than a long static list. For "Sinais de Alerta" (Goal: Inform Urgently), a visually distinct card with a warning icon (Unicode) and contrasting colors is used to draw immediate attention (Method: HTML/Tailwind). Other informational sections ("Cuidados em Casa", etc.) use clear typography and Unicode icons for better readability and scannability (Method: HTML/Tailwind). This approach translates the report's goals into an effective interactive experience without needing data visualization libraries. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .nav-button {
+            transition: all 0.3s ease;
+        }
+        .nav-button.active {
+            background-color: #38A3A5;
+            color: white;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .illness-button.active {
+            background-color: #57CC99;
+            color: white;
+        }
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .alert-card {
+            background-color: #FFD6D6;
+            border-left: 5px solid #D9534F;
+        }
+    </style>
+     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-[#F4F9F9]">
+    <div class="container mx-auto p-4 md:p-8 max-w-4xl">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-[#22577A]">Guia Rápido para Pais</h1>
+            <p class="text-md text-[#80ED99] font-semibold mt-1">Doenças Respiratórias em Crianças</p>
+            <p class="text-sm text-gray-500 mt-2">Um guia interativo para as famílias de Porto Alegre</p>
+        </header>
+
+        <nav class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 md:gap-4 mb-8">
+            <button data-tab="geral" class="nav-button active w-full text-sm md:text-base font-semibold py-3 px-2 bg-white text-[#38A3A5] rounded-lg shadow-sm hover:shadow-md">Visão Geral</button>
+            <button data-tab="alerta" class="nav-button w-full text-sm md:text-base font-semibold py-3 px-2 bg-white text-[#38A3A5] rounded-lg shadow-sm hover:shadow-md">⚠️ Sinais de Alerta</button>
+            <button data-tab="casa" class="nav-button w-full text-sm md:text-base font-semibold py-3 px-2 bg-white text-[#38A3A5] rounded-lg shadow-sm hover:shadow-md">Cuidados em Casa</button>
+            <button data-tab="medico" class="nav-button w-full text-sm md:text-base font-semibold py-3 px-2 bg-white text-[#38A3A5] rounded-lg shadow-sm hover:shadow-md">Quando Ir ao Médico</button>
+            <button data-tab="prevencao" class="nav-button w-full text-sm md:text-base font-semibold py-3 px-2 bg-white text-[#38A3A5] rounded-lg shadow-sm hover:shadow-md">Prevenção</button>
+        </nav>
+
+        <main id="content-container">
+            <section id="geral" class="content-section active fade-in">
+                 <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h2 class="text-2xl font-bold text-[#22577A] mb-4">Fique de Olho nos Sintomas</h2>
+                    <p class="text-gray-600 mb-6">As doenças respiratórias podem ter sintomas parecidos. Clique em uma doença abaixo para ver os detalhes e saber diferenciar.</p>
+                    <div id="illness-nav" class="flex flex-wrap gap-2 mb-6">
+                    </div>
+                    <div id="illness-content" class="bg-gray-50 p-4 rounded-lg min-h-[200px]">
+                    </div>
+                 </div>
+            </section>
+
+            <section id="alerta" class="content-section fade-in">
+                <div class="alert-card p-6 rounded-xl shadow-md">
+                    <h2 class="text-2xl font-bold text-[#D9534F] mb-4 flex items-center"><span class="text-3xl mr-3">🚨</span> SINAIS DE ALERTA</h2>
+                    <p class="text-gray-800 mb-4 font-semibold">Leve ao médico IMEDIATAMENTE se seu filho apresentar um ou mais destes sinais:</p>
+                    <ul id="alert-list" class="space-y-3">
+                    </ul>
+                </div>
+            </section>
+
+            <section id="casa" class="content-section fade-in">
+                 <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h2 class="text-2xl font-bold text-[#22577A] mb-4">O Que Fazer em Casa</h2>
+                     <p class="text-gray-600 mb-6">Para sintomas leves, estas atitudes podem ajudar seu filho a se sentir melhor e a se recuperar mais rápido.</p>
+                    <ol id="home-care-list" class="space-y-4">
+                    </ol>
+                </div>
+            </section>
+
+            <section id="medico" class="content-section fade-in">
+                 <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h2 class="text-2xl font-bold text-[#22577A] mb-4">Quando Procurar o Médico (Sem Urgência)</h2>
+                     <p class="text-gray-600 mb-6">Mesmo sem os sinais de alerta graves, procure o posto de saúde ou o pediatra nestas situações:</p>
+                    <ul id="doctor-list" class="space-y-3 list-disc list-inside text-gray-700">
+                    </ul>
+                </div>
+            </section>
+
+            <section id="prevencao" class="content-section fade-in">
+                 <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h2 class="text-2xl font-bold text-[#22577A] mb-4">Prevenção é a Melhor Solução!</h2>
+                    <p class="text-gray-600 mb-6">Pequenos hábitos no dia a dia fazem uma grande diferença para proteger a saúde respiratória das crianças.</p>
+                    <ul id="prevention-list" class="space-y-3">
+                    </ul>
+                </div>
+            </section>
+        </main>
+        
+        <footer class="text-center mt-12">
+          
+            <div class="flex justify-center flex-wrap gap-x-4 gap-y-2 mt-2">
+                <a href="https://www.gov.br/saude/pt-br/assuntos/saude-de-a-a-z/s/srag" target="_blank" class="text-xs text-[#38A3A5] hover:underline">Ministério da Saúde</a>
+                <a href="https://bvsms.saude.gov.br/bvs/publicacoes/partes/infeccoes_respiratorias1.pdf" target="_blank" class="text-xs text-[#38A3A5] hover:underline">Cartilhas Técnicas</a>
+                <a href="https://portal.fiocruz.br/noticia/infogripe-casos-de-srag-seguem-em-crescimento-em-parte-do-pais" target="_blank" class="text-xs text-[#38A3A5] hover:underline">Fiocruz</a>
+                <a href="https://saude.rs.gov.br/aumento-de-hospitalizacoes-de-criancas-por-problemas-respiratorios-esta-associado-a-baixa-cobertura-vacinal-de-influenza-e-covid" target="_blank" class="text-xs text-[#38A3A5] hover:underline">Secretaria da Saúde RS</a>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        const appData = {
+            illnesses: {
+                resfriado: {
+                    name: 'Resfriado',
+                    symptoms: [
+                        'Nariz escorrendo',
+                        'Espirros',
+                        'Tosse fraquinha (seca ou com pouco catarro)',
+                        'Leve mal-estar',
+                        'Pode ter febre baixa'
+                    ]
+                },
+                gripe: {
+                    name: 'Gripe',
+                    symptoms: [
+                        'Febre alta (acima de 38°C) que aparece de repente',
+                        'Tosse (seca ou com catarro)',
+                        'Dor de garganta',
+                        'Dor de cabeça',
+                        'Dores no corpo (músculos e juntas)',
+                        'Muito cansaço',
+                        'Calafrios'
+                    ]
+                },
+                bronquiolite: {
+                    name: 'Bronquiolite',
+                    symptoms: [
+                        'Tosse que não para',
+                        'Respiração rápida e ofegante',
+                        'Peito com "chiado" (parece um gatinho ronronando)',
+                        'Dificuldade para respirar (o bebê parece "cansado" ao respirar)',
+                        'Irritabilidade',
+                        'Dificuldade para mamar ou comer',
+                        'Febre baixa'
+                    ]
+                },
+                pneumonia: {
+                    name: 'Pneumonia',
+                    symptoms: [
+                        'Tosse (geralmente com catarro)',
+                        'Febre alta que não passa',
+                        'Dificuldade para respirar',
+                        'Respiração muito rápida',
+                        'Dor no peito (em crianças maiores)',
+                        'Criança "molinha", sem energia',
+                        'Asas do nariz se movimentam muito ao respirar (em bebês)'
+                    ]
+                },
+                asma: {
+                    name: 'Asma',
+                    symptoms: [
+                        'Tosse frequente (principalmente à noite ou ao acordar)',
+                        'Peito com "chiado"',
+                        'Falta de ar',
+                        'Sensação de aperto no peito',
+                        'Crises que pioram com poeira, pólen, cheiros fortes, frio, exercícios'
+                    ]
+                }
+            },
+            alerts: [
+                { title: 'Dificuldade para respirar', details: ['Respiração muito rápida ou ofegante.', 'A pele entre as costelas ou no pescoço "afunda" ao respirar.', 'Asas do nariz se movimentando demais.', 'Lábios ou pontas dos dedos roxos ou azulados.', 'Chiado no peito que não passa.', 'Criança fazendo um "gemido" ao respirar (principalmente bebês).'] },
+                { title: 'Muito mole ou sonolento', details: ['A criança está "molinha", sem reação, apática ou difícil de acordar.'] },
+                { title: 'Não consegue comer ou beber', details: ['Não mama, não bebe líquidos ou vomita tudo.'] },
+                { title: 'Febre alta que não baixa', details: ['Febre que não melhora com remédios ou que dura muitos dias.'] },
+                { title: 'Outros sinais graves', details: ['Muita irritabilidade ou choro que não para.', 'Convulsões.', 'Piora muito rápido.'] }
+            ],
+            homeCare: [
+                 { icon: '💧', text: '<strong>Hidrate bem:</strong> Dê bastante água, sucos (para crianças maiores), chás e, se for bebê, ofereça mais vezes o peito.' },
+                 { icon: '👃', text: '<strong>Limpe o nariz:</strong> Lave o nariz com soro fisiológico.' },
+                 { icon: '🌬️', text: '<strong>Deixe o ambiente limpo e arejado:</strong> Evite poeira, abra as janelas. Não use produtos com cheiro forte nem fume perto da criança.' },
+                 { icon: '😴', text: '<strong>Repouso:</strong> Incentive seu filho a descansar.' },
+                 { icon: '🍎', text: '<strong>Comida saudável:</strong> Ofereça alimentos leves e nutritivos.' },
+                 { icon: '💊', text: '<strong>Remédios:</strong> Dê SÓ o que o médico receitou, na dose certa. NUNCA medique por conta própria.' },
+                 { icon: '😷', text: '<strong>Evite contato:</strong> Se possível, não deixe a criança doente muito perto de outras crianças, bebês ou idosos.' }
+            ],
+            doctorVisits: [
+                'A tosse durar mais de 4 semanas.',
+                'A febre, mesmo que não seja muito alta, durar mais de 3 dias.',
+                'Os sintomas piorarem aos poucos.',
+                'A criança tiver chiado no peito várias vezes.',
+                'Você desconfiar de outra coisa, como dor de ouvido forte ou dor de cabeça que não passa.',
+                'Se seu bebê tiver menos de 2 meses e apresentar tosse ou dificuldade para respirar.'
+            ],
+            prevention: [
+                 { icon: '💉', text: '<strong>Vacinação em dia:</strong> Mantenha o cartão de vacinas completo (Gripe, COVID-19 e outras).' },
+                 { icon: '🧼', text: '<strong>Lavar as mãos:</strong> Lave sempre as mãos do seu filho e as suas com água e sabão ou álcool em gel.' },
+                 { icon: '👨‍👩‍👧‍👦', text: '<strong>Evite lugares muito cheios:</strong> Principalmente em épocas de vírus.' },
+                 { icon: '🤱', text: '<strong>Amamentação:</strong> O leite materno protege o bebê.' },
+                 { icon: '🥗', text: '<strong>Coma bem e beba bastante água:</strong> Isso fortalece a imunidade.' }
+            ]
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const navButtons = document.querySelectorAll('.nav-button');
+            const contentSections = document.querySelectorAll('.content-section');
+            const illnessNav = document.getElementById('illness-nav');
+            const illnessContent = document.getElementById('illness-content');
+            
+            function switchTab(tabId) {
+                navButtons.forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.tab === tabId);
+                });
+                contentSections.forEach(section => {
+                    section.classList.toggle('active', section.id === tabId);
+                });
+            }
+
+            navButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    switchTab(button.dataset.tab);
+                });
+            });
+
+            function showIllness(illnessKey) {
+                const illness = appData.illnesses[illnessKey];
+                if (!illness) return;
+
+                const symptomsHtml = `
+                    <h3 class="text-xl font-bold text-[#38A3A5] mb-3">${illness.name}</h3>
+                    <ul class="space-y-2 list-disc list-inside text-gray-700">
+                        ${illness.symptoms.map(symptom => `<li>${symptom}</li>`).join('')}
+                    </ul>
+                `;
+                illnessContent.innerHTML = symptomsHtml;
+                illnessContent.classList.add('fade-in');
+                setTimeout(() => illnessContent.classList.remove('fade-in'), 500);
+
+                document.querySelectorAll('.illness-button').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.illness === illnessKey);
+                });
+            }
+
+            function initializeGeral() {
+                Object.keys(appData.illnesses).forEach(key => {
+                    const illness = appData.illnesses[key];
+                    const button = document.createElement('button');
+                    button.dataset.illness = key;
+                    button.className = 'illness-button text-sm px-4 py-2 rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300 transition';
+                    button.textContent = illness.name;
+                    button.addEventListener('click', () => showIllness(key));
+                    illnessNav.appendChild(button);
+                });
+                showIllness('resfriado');
+            }
+
+            function initializeAlerts() {
+                const alertList = document.getElementById('alert-list');
+                alertList.innerHTML = appData.alerts.map(alert => `
+                    <li class="bg-white/50 p-4 rounded-lg">
+                        <p class="font-bold text-red-700">${alert.title}</p>
+                        <ul class="text-sm text-gray-700 mt-1 list-disc list-inside">
+                             ${alert.details.map(detail => `<li>${detail}</li>`).join('')}
+                        </ul>
+                    </li>
+                `).join('');
+            }
+            
+            function initializeHomeCare() {
+                const list = document.getElementById('home-care-list');
+                list.innerHTML = appData.homeCare.map((item, index) => `
+                    <li class="flex items-start">
+                        <span class="text-2xl mr-4">${item.icon}</span>
+                        <div class="text-gray-700">${item.text}</div>
+                    </li>
+                `).join('');
+            }
+            
+            function initializeDoctorVisits() {
+                const list = document.getElementById('doctor-list');
+                list.innerHTML = appData.doctorVisits.map(item => `<li>${item}</li>`).join('');
+            }
+
+            function initializePrevention() {
+                const list = document.getElementById('prevention-list');
+                list.innerHTML = appData.prevention.map(item => `
+                    <li class="flex items-center p-3 bg-gray-50 rounded-lg">
+                         <span class="text-2xl mr-4">${item.icon}</span>
+                         <span class="text-gray-700">${item.text}</span>
+                    </li>
+                `).join('');
+            }
+
+            initializeGeral();
+            initializeAlerts();
+            initializeHomeCare();
+            initializeDoctorVisits();
+            initializePrevention();
+            switchTab('geral');
+        });
+    </script>
+</body>
+</html>
