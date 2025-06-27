@@ -66,8 +66,8 @@
                  <div class="bg-white p-6 rounded-xl shadow-md">
                     <h2 class="text-2xl font-bold text-[#22577A] mb-4">Fique de Olho nos Sintomas</h2>
                     <p class="text-gray-600 mb-6">As doenças respiratórias podem ter sintomas parecidos. Clique em uma doença abaixo para ver os detalhes e saber diferenciar.</p>
-			<p class="text-red-600  text-semibold mb-6">ADULTO, SE TIVER ESSES SINTOMAS, USE MASCARA POR FAVOR</p>
                     <div id="illness-nav" class="flex flex-wrap gap-2 mb-6">
+			    //REMOVI O AVISO DAQUI PARA COLOCAR APENAS EM GRIPE E RESFRIADO
                     </div>
                     <div id="illness-content" class="bg-gray-50 p-4 rounded-lg min-h-[200px]">
                     </div>
@@ -133,6 +133,7 @@
                 resfriado: {
                     name: 'Resfriado',
                     symptoms: [
+			'<span class="text-red-600 font-bold">ADULTO: SE TIVER ESTES SINTOMAS, USE MASCARA POR FAVOR</span>', //ADICIONEI O AVISO AQUI
                         'Nariz escorrendo',
                         'Espirros',
                         'Tosse fraquinha (seca ou com pouco catarro)',
@@ -144,6 +145,7 @@
                 gripe: {
                     name: 'Gripe',
                     symptoms: [
+			'<span class="text-red-600 font-bold">ADULTO: SE TIVER ESTES SINTOMAS, USE MASCARA POR FAVOR</span>', //ADICIONEI O AVISO AQUI
                         'Febre alta (acima de 38°C) que aparece de repente',
                         'Tosse (seca ou com catarro)',
                         'Dor de garganta',
@@ -160,7 +162,7 @@
                         'Mais comum até os 2 anos',
                         'Tosse que não para',
                         'Respiração rápida e ofegante',
-                        'Peito com "chiado" (parece um gatinho ronronando)',
+                        'Peito com "chiado"', //TIREI O RONRONANDO, ACHO QUE NAO AGREGA NADA
                         'Dificuldade para respirar (o bebê parece "cansado" ao respirar)',
                         'Irritabilidade',
                         'Dificuldade para mamar ou comer',
