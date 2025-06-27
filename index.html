@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Guia Interativo: Doenças Respiratórias em Crianças</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
+       <style>
         body {
             font-family: 'Inter', sans-serif;
         }
@@ -109,7 +109,7 @@
         </main>
         
         <footer class="text-center mt-12">
-            <div class="flex justify-center flex-wrap gap-x-4 gap-y-2 mt-4">
+                <div class="flex justify-center flex-wrap gap-x-4 gap-y-2 mt-4">
                 <a href="https://bvsms.saude.gov.br/bvs/publicacoes/partes/infeccoes_respiratorias1.pdf" target="_blank" class="text-xs text-[#38A3A5] hover:underline">Ministério da Saúde (IRAs em Crianças - PDF)</a>
                 <a href="https://www.gov.br/saude/pt-br/centrais-de-conteudo/publicacoes/notas-tecnicas/2023/nota-tecnica-no-30-2023-cgvdi-dpni-svsa-ms" target="_blank" class="text-xs text-[#38A3A5] hover:underline">Ministério da Saúde (Manejo de VSR - NT)</a>
                 <a href="https://www.gov.br/saude/pt-br/vacinacao" target="_blank" class="text-xs text-[#38A3A5] hover:underline">Ministério da Saúde (Vacinação)</a>
@@ -135,7 +135,7 @@
                         'Tosse fraquinha (seca ou com pouco catarro)',
                         'Leve mal-estar',
                         'Pode ter febre baixa',
-                        'Passa de uma pessoa para a outra"
+                        'Passa de uma pessoa para a outra'
                     ]
                 },
                 gripe: {
@@ -148,20 +148,21 @@
                         'Dores no corpo (músculos e juntas)',
                         'Muito cansaço',
                         'Calafrios',
-                        'Passa de uma pessoa para a outra"
+                        'Passa de uma pessoa para a outra'
                     ]
                 },
                 bronquiolite: {
                     name: 'Bronquiolite',
                     symptoms: [
-                        'Mais como até os 2 anos',
+                        'Mais comum até os 2 anos',
                         'Tosse que não para',
                         'Respiração rápida e ofegante',
                         'Peito com "chiado" (parece um gatinho ronronando)',
                         'Dificuldade para respirar (o bebê parece "cansado" ao respirar)',
                         'Irritabilidade',
                         'Dificuldade para mamar ou comer',
-                        'Febre baixa'
+                        'Febre baixa',
+                        'Passa de uma pessoa para a outra'
                     ]
                 },
                 pneumonia: {
@@ -174,7 +175,7 @@
                         'Dor no peito (em crianças maiores)',
                         'Criança "molinha", sem energia',
                         'Asas do nariz se movimentam muito ao respirar (em bebês)',
-                        'Passa de uma pessoa para a outra"
+                        'Passa de uma pessoa para a outra'
                     ]
                 },
                 asma: {
@@ -185,7 +186,7 @@
                         'Falta de ar',
                         'Sensação de aperto no peito',
                         'Crises que pioram com poeira, pólen, cheiros fortes, frio, exercícios',
-                        'Não passa para outra pessoa e é para vida toda, mas é tratavél'
+                        'Não passa para outra pessoa e é pra vida toda, mas pode ser tratada'
                     ]
                 }
             },
@@ -291,7 +292,7 @@
                 const list = document.getElementById('home-care-list');
                 list.innerHTML = appData.homeCare.map((item, index) => `
                     <li class="flex items-start">
-                        <span class="text-2xl mr-4">${item.icon}</span>
+                        <span class="mr-4 text-2xl">${item.icon}</span>
                         <div class="text-gray-700">${item.text}</div>
                     </li>
                 `).join('');
@@ -306,7 +307,7 @@
                 const list = document.getElementById('prevention-list');
                 list.innerHTML = appData.prevention.map(item => `
                     <li class="flex items-center p-3 bg-gray-50 rounded-lg">
-                         <span class="text-2xl mr-4">${item.icon}</span>
+                         <span class="mr-4 text-2xl">${item.icon}</span>
                          <span class="text-gray-700">${item.text}</span>
                     </li>
                 `).join('');
